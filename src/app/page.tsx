@@ -1,12 +1,9 @@
-import { DB } from "@/lib/db-types";
-import SQLite from "better-sqlite3";
-import { Kysely, SqliteDialect } from "kysely";
 import Image from "next/image";
+import Link from "next/link";
+import getDB from "@/lib/db";
 
 export default async function Home() {
-  const dialect = new SqliteDialect({ database: new SQLite("db.sqlite") });
-  const db = new Kysely<DB>({ dialect });
-  const join = await db
+  const join = await getDB()
   .selectFrom('authors')
   .innerJoin('albums', 'albums.author_id', 'authors.id')
   .select(['albums.name as album_name', 'authors.name as author_name', 'albums.id as album_id'])
@@ -22,7 +19,12 @@ export default async function Home() {
 
         <div>
           {join.map(join => (
-          <div key={join.album_id}><Image width={128} height={128} src="/cover.jpg" alt="cover" />{join.album_name} - {join.author_name}</div>
+          <div key={join.album_id}>
+            <Link href={`/album/${join.album_id}`}>Detail</Link>
+            <Image width={128} height={128} src="/cover.jpg" alt="cover" />
+            {join.album_name} - {join.author_name}
+            <p>&nbsp;</p>
+          </div>
           ))}
         </div>
 
