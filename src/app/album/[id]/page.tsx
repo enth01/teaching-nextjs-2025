@@ -1,4 +1,5 @@
 import getDB from "@/lib/db";
+import Link from "next/link";
 
 export default async function AlbumDetail({
   params,
@@ -19,9 +20,16 @@ export default async function AlbumDetail({
   .where('id', '=', Number(id))
   .execute()
 
+  const author = await getDB()
+  .selectFrom('authors')
+  .selectAll()
+  .where('id', '=', album[0].author_id)
+  .execute()
+
   return(
     <div>
       <h1 style={{fontSize: "2rem"}}>{album[0].name}</h1>
+      <h2>autor: <Link href={`/author/${author[0].id}`}>{author[0].name}</Link></h2>
       <ul>
         {songs.map(song => (
           <li key={song.id}>

@@ -1,3 +1,3 @@
 export default function About(){
-  return <p>pipik</p>
+  return <p>👍</p>
 }
