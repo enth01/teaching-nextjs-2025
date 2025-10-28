@@ -1,4 +1,5 @@
 import getDB from "@/lib/db";
+import Link from "next/link";
 
 export default async function Search({
   searchParams,
@@ -27,25 +28,36 @@ export default async function Search({
     .execute();
 
   return (
-    <div>
-      <h1>songs:</h1>
-      {songs.map((song) => (
-        <div key={song.id}>{song.name}</div>
-      ))}
+    <main>
 
-      <br />
+      {songs.length === 0 && albums.length === 0 && authors.length === 0 && (<p className="text-center">No results</p>)}
 
-      <h1>albums:</h1>
-      {albums.map((album) => (
-        <div key={album.id}>{album.name}</div>
-      ))}
+      {songs.length > 0 && (
+        <>
+          <h1>Songs:</h1>
+          {songs.map((song) => (
+            <div key={song.id}>{song.name}</div>
+          ))}
+        </>
+      )}
 
-      <br />
+      {albums.length > 0 && (
+        <>
+          <h1>Albums:</h1>
+          {albums.map((album) => (
+            <Link className="underline block" href={`/album/${album.id}`} key={album.id}>{album.name}</Link>
+          ))}
+        </>
+      )}
 
-      <h1>authors:</h1>
-      {authors.map((authors) => (
-        <div key={authors.id}>{authors.name}</div>
-      ))}
-    </div>
+      {authors.length > 0 && (
+        <>
+          <h1>Authors:</h1>
+          {authors.map((authors) => (
+            <Link className="underline block" href={`/author/${authors.id}`} key={authors.id}>{authors.name}</Link>
+          ))}
+        </>
+      )}
+    </main>
   );
 }

@@ -9,17 +9,22 @@ export function NavBar() {
     <div className="navbar bg-base-100 shadow-sm">
       <div className="flex-1">
         <Link href={"/"}>Domov</Link>
+        &nbsp;&nbsp;
+        <Link href={"/playlists"}>Playlists</Link>
       </div>
       <div className="flex gap-2">
         <input
           type="text"
           placeholder="Search"
+          name="search"
+          id="search"
           className="input input-bordered w-24 md:w-auto"
           onChange={(e) => {
             setSearchInput(e.target.value);
           }}
         />
         <Link
+          style={{ lineHeight: "40px" }}
           href={{
             pathname: "/search",
             query: { q: searchInput },

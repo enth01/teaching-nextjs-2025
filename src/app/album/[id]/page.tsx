@@ -9,27 +9,27 @@ export default async function AlbumDetail({
   const { id } = await params;
 
   const songs = await getDB()
-  .selectFrom('songs')
-  .selectAll()
-  .where('album_id', '=', Number(id))
-  .execute()
+    .selectFrom('songs')
+    .selectAll()
+    .where('album_id', '=', Number(id))
+    .execute()
 
   const album = await getDB()
-  .selectFrom('albums')
-  .selectAll()
-  .where('id', '=', Number(id))
-  .execute()
+    .selectFrom('albums')
+    .selectAll()
+    .where('id', '=', Number(id))
+    .execute()
 
   const author = await getDB()
-  .selectFrom('authors')
-  .selectAll()
-  .where('id', '=', album[0].author_id)
-  .execute()
+    .selectFrom('authors')
+    .selectAll()
+    .where('id', '=', album[0].author_id)
+    .execute()
 
-  return(
-    <div>
-      <h1 style={{fontSize: "2rem"}}>{album[0].name}</h1>
-      <h2>autor: <Link href={`/author/${author[0].id}`}>{author[0].name}</Link></h2>
+  return (
+    <main>
+      <h1>{album[0].name}</h1>
+      <p className="text-center">autor: <Link className="underline" href={`/author/${author[0].id}`}>{author[0].name}</Link></p>
       <ul>
         {songs.map(song => (
           <li key={song.id}>
@@ -37,6 +37,6 @@ export default async function AlbumDetail({
           </li>
         ))}
       </ul>
-    </div>
+    </main>
   );
 }
