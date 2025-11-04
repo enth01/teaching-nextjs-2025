@@ -8,6 +8,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
   await db.deleteFrom("songs").execute();
   await db.deleteFrom("albums").execute();
   await db.deleteFrom("authors").execute();
+  await db.deleteFrom("users").execute;
 
   for (let i = 0; i < 20; i += 1) {
     await db
@@ -63,13 +64,40 @@ export async function seed(db: Kysely<DB>): Promise<void> {
     }
   }
 
+  await db
+    .insertInto("users")
+    .values({
+      email: "example@gmail.com",
+      id: 1,
+      name: "user1",
+      password: "heslo",
+    })
+    .execute()
+
   for (let i = 0; i < 10; i++) {
     await db
-      .insertInto("playlists")
+      .insertInto("users")
       .values({
-        name: faker.location.city(),
+        email: faker.internet.email(),
+        name: faker.person.firstName(),
+        password: faker.internet.password()
       })
-      .execute();
+      .execute()
+  }
+
+  const users = await db.selectFrom("users").selectAll().execute();
+
+  for (const user of users) {
+    const number_of_playlists = faker.number.int({ min: 1, max: 10 })
+    for (let i = 0; i < number_of_playlists; i++) {
+      await db
+        .insertInto("playlists")
+        .values({
+          name: faker.food.fruit(),
+          user_id: user.id
+        })
+        .execute();
+    }
   }
 
   const playlists = await db.selectFrom("playlists").selectAll().execute();
