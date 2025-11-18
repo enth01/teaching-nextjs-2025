@@ -1,5 +1,6 @@
 import getDB from "@/lib/db";
 import Link from "next/link";
+import AddButton from "./addButton";
 
 export default async function AlbumDetail({
   params,
@@ -26,6 +27,8 @@ export default async function AlbumDetail({
     .where('id', '=', album[0].author_id)
     .execute()
 
+  const playlists = await getDB().selectFrom("playlists").selectAll().where('user_id', '=', 1).execute();
+
   return (
     <main>
       <h1>{album[0].name}</h1>
@@ -34,6 +37,16 @@ export default async function AlbumDetail({
         {songs.map(song => (
           <li key={song.id}>
             <p>{song.name}</p>
+            <details className="dropdown">
+              <summary className="btn m-1">add to album</summary>
+              <ul className="menu dropdown-content bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+                {playlists.map(playlist => (
+                  <li key={playlist.id}>
+                    <AddButton playlistId={playlist.id} songId={song.id} playlistName={playlist.name} />
+                  </li>
+                ))}
+              </ul>
+            </details>
           </li>
         ))}
       </ul>
