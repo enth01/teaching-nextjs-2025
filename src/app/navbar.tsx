@@ -1,9 +1,15 @@
 "use client";
+
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useState } from "react";
 
 export function NavBar() {
   const [searchInput, setSearchInput] = useState("");
+  const router = useRouter();
+  const handler = () => {
+    router.push(`/search?q=${searchInput}`);
+  }
 
   return (
     <div className="navbar bg-base-100 shadow-sm">
@@ -21,6 +27,11 @@ export function NavBar() {
           className="input input-bordered w-24 md:w-auto"
           onChange={(e) => {
             setSearchInput(e.target.value);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handler();
+            }
           }}
         />
         <Link
