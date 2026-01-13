@@ -1,5 +1,6 @@
 import getDB from "@/lib/db";
 import RemoveButton from "./removeButton";
+import Edit from "./edit"
 
 export default async function PlaylistDetail({
   params,
@@ -35,6 +36,7 @@ export default async function PlaylistDetail({
   return (
     <main>
       <h1 style={{ fontSize: "2rem" }}>{playlist[0].name}</h1>
+      <Edit playlistId={Number(id)} />
       <ul>
         {songs.map((song) => (
           <li key={song.id}>

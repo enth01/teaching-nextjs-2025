@@ -25,3 +25,21 @@ export async function addSong(playlistId: number, song_id: number) {
   if (exists) return;
   await db.insertInto('playlists_songs').values({ playlist_id: playlistId, song_id: song_id }).execute();
 }
+
+export async function changePlaylistName(playlistId: number, name: string) {
+  console.log(`Changing playlist ${playlistId} name`);
+  const db = getDB();
+  await db.updateTable('playlists').set({ name: name }).where('id', '=', playlistId).execute();
+}
+
+export async function addPlaylist(name: string, user_id: number) {
+  console.log(`Adding playlist ${name}`);
+  const db = getDB();
+  await db
+    .insertInto("playlists")
+    .values({
+      name:  name,
+      user_id: user_id
+    })
+    .execute();
+}
