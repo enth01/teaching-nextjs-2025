@@ -12,7 +12,7 @@ export function NavBar() {
   }
 
   return (
-    <div className="navbar bg-base-100 shadow-sm">
+    <div className="navbar fixed bg-base-100 shadow-sm">
       <div className="flex-1">
         <Link href={"/"}>Domov</Link>
         &nbsp;&nbsp;
