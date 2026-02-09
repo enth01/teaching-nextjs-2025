@@ -51,6 +51,7 @@ export default async function Home() {
                 style={{ margin: "1rem auto", width: "128px", height: "128px" }}
                 src={faker.image.url()}
                 alt="cover"
+                priority
               />
               <p>
                 {join.album_name} - {join.author_name}
