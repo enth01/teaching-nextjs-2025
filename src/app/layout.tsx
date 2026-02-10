@@ -27,7 +27,7 @@ const randomSongs = await db
   .innerJoin("albums", "albums.id", "songs.album_id")
   .innerJoin("authors", "authors.id", "albums.author_id")
   .limit(5)
-  .select(["songs.name", "songs.duration", "authors.name as author"])
+  .select(["songs.id", "songs.name", "songs.duration", "authors.name as author"])
   .execute();
 
 

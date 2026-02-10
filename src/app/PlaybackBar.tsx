@@ -2,12 +2,14 @@
 
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { skip, play, pausee, playback_start, playback_end } from "@/actions/history";
 
-export default function PlaybackBar(props: { songs: { name: string, duration: number, author: string }[] }) {
+export default function PlaybackBar(props: { songs: { name: string, duration: number, author: string, id: number }[] }) {
   const [queue] = useState(props.songs);
   const [paused, setPaused] = useState(false);
   const [song_length, setSongLength] = useState(queue[0].duration);
   const [song_name, setSongName] = useState(queue[0].name);
+  const [song_id, setSongId] = useState(queue[0].id);
   const [author_name, setAuthorName] = useState(queue[0].author);
   const [time_percentage, set_time_percentage] = useState("0")
   const [count, setCount] = useState(0);
@@ -16,50 +18,46 @@ export default function PlaybackBar(props: { songs: { name: string, duration: nu
   function pause() {
     if (paused) {
       setPaused(false);
+      play(song_id);
       return;
     }
+    pausee(song_id);
     setPaused(true);
   }
 
   function Next_song() {
+    skip(song_id);
     setCount(0);
     set_time_percentage("0")
     const current_index = queue.findIndex((song) => song.name === song_name);
     if (shuffle === true) {
       const random_index = Math.floor(Math.random() * queue.length);
       setSongName(queue[random_index].name);
+      setSongId(queue[random_index].id);
       setAuthorName(queue[random_index].author);
       setSongLength(queue[random_index].duration);
+      playback_start(queue[random_index].id)
     } else {
       if (current_index === queue.length - 1) {
         setSongName(queue[0].name);
+        setSongId(queue[0].id);
         setAuthorName(queue[0].author);
         setSongLength(queue[0].duration);
         setPaused(true);
+        playback_start(queue[0].id)
       } else {
         setSongLength(queue[(current_index + 1)].duration)
         setAuthorName(queue[(current_index + 1)].author)
         setSongName(queue[(current_index + 1)].name)
+        setSongId(queue[(current_index + 1)].id)
+        playback_start(queue[(current_index + 1)].id)
       }
     }
   }
 
   function previous() {
-    // setCount(0);
-    // set_time_percentage("0");
-    const current_index = queue.findIndex((song) => song.name === song_name);
-
-    if (current_index === 0) {
-      setSongName(queue[queue.length - 1].name);
-      setAuthorName(queue[queue.length - 1].author);
-      setSongLength(queue[queue.length - 1].duration);
-      setPaused(true);
-    } else {
-      setSongLength(queue[(current_index - 1)].duration)
-      setAuthorName(queue[(current_index - 1)].author)
-      setSongName(queue[(current_index - 1)].name)
-    }
-    
+    setCount(0);
+    set_time_percentage("0");
   }
 
   useEffect(() => {
@@ -74,6 +72,7 @@ export default function PlaybackBar(props: { songs: { name: string, duration: nu
     set_time_percentage(String(Math.floor(count / song_length * 100)))
 
     if (count >= song_length) {
+      playback_end(song_id)
       Next_song();
     }
 

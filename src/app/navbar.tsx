@@ -17,6 +17,8 @@ export function NavBar() {
         <Link href={"/"}>Domov</Link>
         &nbsp;&nbsp;
         <Link href={"/playlists"}>Playlists</Link>
+        &nbsp;&nbsp;
+        <Link href={"/history"}>History</Link>
       </div>
       <div className="flex gap-2">
         <input

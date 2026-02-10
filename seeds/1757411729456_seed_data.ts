@@ -9,6 +9,7 @@ export async function seed(db: Kysely<DB>): Promise<void> {
   await db.deleteFrom("albums").execute();
   await db.deleteFrom("authors").execute();
   await db.deleteFrom("users").execute;
+  await db.deleteFrom("playback_events").execute();
 
   for (let i = 0; i < 20; i += 1) {
     await db
@@ -117,4 +118,28 @@ export async function seed(db: Kysely<DB>): Promise<void> {
         .execute();
     }
   }
+
+  for (let i = 0; i < 5; i++) {
+    const songid =  faker.number.int({ min: 1, max: 100 });
+    await db
+      .insertInto("playback_events")
+      .values({
+        name: "playback_start",
+        date: faker.date.past().getTime(),
+        user_id: 1,
+        song_id: songid
+      })
+      .execute();
+      console.log("penis");
+      await db
+      .insertInto("playback_events")
+      .values({
+        name: "playback_end",
+        date: faker.date.past().getTime(),
+        user_id: 1,
+        song_id: songid
+      })
+      .execute();
+  }
+
 }
